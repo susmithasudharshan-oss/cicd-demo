@@ -18,10 +18,20 @@ pipeline {
                 echo 'code is scanned successfully'
             }
         }
-      stage('build') {
-        setps {
-          echo 'code is build successfully'
-    }
-}
+        stage('build') {
+            steps {
+                echo 'code is build successfully'
+            }
+        }
+        stage('test') {
+            steps {
+                echo 'test is sucessfully completed'
+            }
+        }
+        stage('deploy') {
+            steps {
+                echo 'code is deployed successfully'
+            }
+        }
     }
 }
