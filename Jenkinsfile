@@ -18,19 +18,26 @@ pipeline {
                 echo 'code is scanned successfully'
             }
         }
-        stage('build') {
-            steps {
-                echo 'code is build successfully'
+        stage("build and test"){
+            steps{
+                sh "docker build -t node-app-test-new1 ."
+                echo 'code build completed'
             }
         }
-        stage('test') {
-            steps {
-                echo 'test is sucessfully completed'
+        stage("push"){
+            steps{
+                withCredentials([usernamePassword(credentialsId:"DockerHubCreds",passwordVariable:"dockerHubPassword",usernameVariable:"dockerHubUsername")]){
+                sh "docker login -u ${env.dockerHubUsername} -p ${env.dockerHubPassword}"
+                sh "docker tag node-app-test-new1:latest ${env.dockerHubUsername}/node-app-test-new1:latest"
+                sh "docker push ${env.dockerHubUsername}/node-app-test-new1:latest"
+                echo 'image pushed successfully'
+                }
             }
         }
-        stage('deploy') {
-            steps {
-                echo 'code is deployed successfully'
+        stage("deploy"){
+            steps{
+                sh "docker-compose down && docker-compose up -d"
+                echo 'deployment completed successfully'
             }
         }
     }
