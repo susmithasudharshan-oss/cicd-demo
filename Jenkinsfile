@@ -23,3 +23,5 @@ pipeline {
           echo 'code is build successfully'
     }
 }
+    }
+}
